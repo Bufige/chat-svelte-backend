@@ -33,24 +33,13 @@ class Chat {
 	async getAllMessages() {
 
 		return new Promise( (resolve, reject) => {
-			this.db.collection('messages').find({}).sort({ 'time': -1}).limit(10).toArray( (err, res) => {
+			this.db.collection('messages').find({}).sort({ _id: -1}).limit(20).toArray( (err, res) => {
 				if(err)
 					reject(err);
 				else 
 					resolve(res);
 			})
 		});
-		/*
-		return new Promise(
-			(resolve, reject) => {
-				this.db.collection('messages').find({}).toArray((err, res) => {
-					if(err)
-						reject(err);
-					else 
-						resolve(res);					
-				}
-			});
-			*/
 	}
 
 	close() {
@@ -75,6 +64,11 @@ io.on('connection', socket => {
 	
 	setTimeout(async () => {
 		const data = await chat.getAllMessages();
+			
+		let tmp = data;
+
+		tmp.reverse();
+
 		socket.emit('onLoad', data);
 	}, 1000);
 
