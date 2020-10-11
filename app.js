@@ -33,7 +33,7 @@ class Chat {
 	async getAllMessages() {
 
 		return new Promise( (resolve, reject) => {
-			this.db.collection('messages').find({}).toArray( (err, res) => {
+			this.db.collection('messages').find({}).sort({ 'time': -1}).limit(10).toArray( (err, res) => {
 				if(err)
 					reject(err);
 				else 
